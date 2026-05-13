@@ -1,35 +1,12 @@
-import { animate, utils, createDraggable, spring } from 'animejs';
+import { createTimer, utils } from 'https://esm.sh/animejs';
 
-const [ $logo ] = utils.$('logo.js');
-const [ $button ] = utils.$('button');
-let rotations = 0;
+const [ $time, $count] = utils.$('.value');
 
-//created bounce animation loop
-animate('.logo.js', {
-    scale: [
-        { to: 1.25, ease: 'inOut(3)', duration: 200 },
-        { to: 1, ease: spring({bounce: .7 })}
-    ],
-    loop: true,
-    loopdelay: 250,
+createTimer({
+    duration: 2000,
+    // loop: true,
+    frameRate: 30,
+    delay: 2000,
+    onUpdate: self => $time.innerHTML = self.currentTime,
+    // onLoop: self => $count.innerHTML = self.currentIteration
 });
-
-//Make the Logo draggable aorund its center
-createDraggable('.logo.js', {
-    container: [0, 0, 0, 0],
-    releaseEase: spring({ bounce: .7 })
-});
-
-//Animate logo rotation on click
-// when done through CDN there is some sort of err connection refused by client. but now with the npm it just doesn't work.
-const rotateLogo = () => {
-    rotations++;
-    $button.innerText = `rotations: ${rotations}`;
-    animate($logo, {
-        rotate: rotations * 360,
-        ease: 'out(4)',
-        duration: 1500,
-    });
-}
-
-$button.addEventListener('click', rotateLogo);
